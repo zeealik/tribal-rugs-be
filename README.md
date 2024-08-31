@@ -2,6 +2,12 @@
 
 Welcome to the backend setup for **Tribal Rugs Palace**, an online platform for selling carpets. This repository contains the server-side code for managing products, user authentication, and other essential functionalities.
 
+# Frontend Repository
+  ```bash
+   git clone https://github.com/zeealik/tribal-rugs-fe.git
+   cd tribal-rugs-fe
+   ```
+
 ## Project Setup
 
 ### Node Version Required
@@ -29,8 +35,8 @@ Ensure you are using Node.js version 18 or later for compatibility with the proj
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/tribal-rugs-palace-backend.git
-   cd tribal-rugs-palace-backend
+   git clone https://github.com/zeealik/tribal-rugs-be.git
+   cd tribal-rugs-be
    ```
 
 2. **Install Dependencies**
@@ -97,5 +103,3 @@ npm run format
 ## Troubleshooting
 
 - **Port Already in Use**: If you encounter the `EADDRINUSE` error, ensure no other process is using port 5000, or change the port in `server.js`.
-
-- **Deprecated Options Warning**: If you see warnings about deprecated options, update your MongoDB connection code to remove `useNewUrlParser` and `useUnifiedTopology`.
