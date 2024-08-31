@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +19,6 @@
     "bcryptjs": "^2.4.3",
     "commitlint": "^19.4.1",
     "dotenv": "^16.4.5",
-    "eslint": "^9.9.1",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "husky": "^9.1.5",
@@ -38,6 +41,11 @@
     ]
   },
   "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "eslint": "^9.9.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.9.0",
     "nodemon": "^3.1.4",
     "prettier": "^3.3.3"
   }
