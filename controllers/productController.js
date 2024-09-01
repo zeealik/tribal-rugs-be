@@ -1,4 +1,9 @@
 const Product = require('../models/productModel');
+const {
+  PRODUCT_NOT_FOUND,
+  PRODUCT_FETCH_ERROR,
+  PRODUCT_CREATE_FAILURE,
+} = require('../constants/messages');
 
 // Get all products
 exports.getAllProducts = async (req, res) => {
@@ -6,7 +11,7 @@ exports.getAllProducts = async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: PRODUCT_FETCH_ERROR });
   }
 };
 
@@ -15,11 +20,11 @@ exports.getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: PRODUCT_NOT_FOUND });
     }
     res.json(product);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: PRODUCT_FETCH_ERROR });
   }
 };
 
@@ -30,6 +35,6 @@ exports.createProduct = async (req, res) => {
     const newProduct = await Product.create({ name, description, price, category, stock, images });
     res.status(201).json(newProduct);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ message: PRODUCT_CREATE_FAILURE });
   }
 };
