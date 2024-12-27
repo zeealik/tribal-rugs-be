@@ -17,6 +17,6 @@ import { UserService } from './user.service';
       useClass: MongoDBUserRepository
     }
   ],
-  exports: [UserService] // Export for use in other modules
+  exports: [UserService]
 })
 export class UsersModule {}

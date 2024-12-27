@@ -6,12 +6,15 @@ import { IUserRepository } from '../../domain/repositories/user.repository.inter
 
 @Injectable()
 export class MongoDBUserRepository implements IUserRepository {
-  constructor(@InjectModel('User') private userModel: Model<User>) {}
+  constructor(@InjectModel('User') private userModel: Model<User>) { }
 
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
 
+  async findByEmail(email: string): Promise<User> {
+    return this.userModel.findOne({ email }).exec();
+  }
   async findById(id: string): Promise<User> {
     return this.userModel.findById(id).exec();
   }

@@ -3,7 +3,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './domain/entities/user.entity';
 import { IUserRepository } from './domain/repositories/user.repository.interface';
 import { CreateUserDto } from './domain/dto/create-user.dto';
-
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -22,9 +22,17 @@ export class UserService {
     return user;
   }
 
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findByEmail(email);
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
   async create(createUserDto: CreateUserDto): Promise<User> {
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     return this.userRepository.create({
       ...createUserDto,
+      password: hashedPassword,
       createdAt: new Date()
     });
   }
