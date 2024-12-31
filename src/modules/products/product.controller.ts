@@ -1,15 +1,19 @@
-
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards, ConflictException } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+// src/modules/products/product.controller.ts
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards, ConflictException, UseInterceptors, UploadedFile, UploadedFiles } from '@nestjs/common';
 import { CreateProductDto } from './domain/dto/create-product.dto';
 import { Product } from './domain/entities/product.entity';
 import { ProductService } from './product.service';
 import { PriceRangeDto } from './domain/dto/price-range.dto';
+import { CloudinaryService } from 'src/shared/services/cloudinary.service';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 
 @Controller('products')
 @UseGuards(JwtAuthGuard)
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService,
+    private readonly cloudinaryService: CloudinaryService
+  ) { }
 
   @Get()
   findAll(): Promise<Product[]> {
@@ -31,6 +35,23 @@ export class ProductController {
     return this.productService.findById(id);
   }
 
+  @Post('upload-image')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImage(@UploadedFile() file: Express.Multer.File) {
+    const imageUrl = await this.cloudinaryService.uploadImage(file);
+    return { url: imageUrl };
+  }
+
+  @Post('upload-images')
+  @UseInterceptors(FilesInterceptor('files', 10))
+  async uploadImages(@UploadedFiles() files: Express.Multer.File[]) {
+    if (!files || files.length === 0) {
+      throw new Error('No files were uploaded');
+    }
+    const uploadedUrls = await this.cloudinaryService.uploadImages(files);
+    return { urls: uploadedUrls };
+  }
+  
   @Post()
   async create(@Body() createProductDto: CreateProductDto): Promise<Product> {
     const existingProduct = await this.productService.findByName(createProductDto.name);

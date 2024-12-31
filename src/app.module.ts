@@ -1,3 +1,4 @@
+// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { mongoConfig } from './shared/config/mongo.config';
@@ -10,7 +11,7 @@ import { ProductsModule } from './modules/products/product.module';
     MongooseModule.forRoot(mongoConfig.uri),
     UsersModule,
     AuthModule,
-    ProductsModule
+    ProductsModule,
   ]
 })
 export class AppModule {}
