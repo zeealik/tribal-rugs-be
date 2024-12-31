@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, ConflictException } from '@nestjs/common';
+// src/modules/users/user.controller.ts
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, ConflictException, NotFoundException } from '@nestjs/common';
 import { User } from './domain/entities/user.entity';
 import { UserService } from './user.service';
 import { CreateUserDto } from './domain/dto/create-user.dto';
@@ -22,7 +23,7 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    const existingUser = await this.userService.findByEmail(createUserDto.email);
+    const existingUser = await this.userService.findByEmail(createUserDto.email, false);
     if (existingUser) {
       throw new ConflictException('Email already exists');
     }
