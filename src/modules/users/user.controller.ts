@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, ConflictException } from '@nestjs/common';
 import { User } from './domain/entities/user.entity';
 import { UserService } from './user.service';
 import { CreateUserDto } from './domain/dto/create-user.dto';
@@ -20,11 +20,15 @@ export class UserController {
     return this.userService.findById(id);
   }
 
-  @Post() // No guard, making it public
-  create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  @Post()
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    const existingUser = await this.userService.findByEmail(createUserDto.email);
+    if (existingUser) {
+      throw new ConflictException('Email already exists');
+    }
     return this.userService.create(createUserDto);
   }
-
+  
   @UseGuards(JwtAuthGuard) // Apply guard to this route
   @Put(':id')
   update(@Param('id') id: string, @Body() updateData: Partial<User>): Promise<User> {
